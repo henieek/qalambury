@@ -15,6 +15,7 @@ signals:
     void someoneLoggedIn(QString);
     void chatMessage(QString,QString);
     void logout(QString);
+    void drawStart(QString);
 private slots:
     void receiveData();
     void drawPointsReceived(QByteArray);
@@ -24,6 +25,7 @@ private:
     QString nickname;
     void chatMessageReceived(QByteArray,QByteArray);
     void someoneLogout(QByteArray);
+    void drawingStart(QByteArray);
 public:
     KalSocket();
     ~KalSocket();

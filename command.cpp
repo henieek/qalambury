@@ -63,3 +63,17 @@ ClearCommand::~ClearCommand() {
 void ClearCommand::run(QTcpSocket *sock) {
     sock->write("clear\n");
 }
+
+WantDrawCommand::WantDrawCommand(bool want) :
+        wantDraw(want)
+{
+
+}
+
+WantDrawCommand::~WantDrawCommand() { }
+
+void WantDrawCommand::run(QTcpSocket *sock) {
+    QString message = "toggle\n";
+    if(!wantDraw) message = "un" + message;
+    sock->write(message.toAscii());
+}

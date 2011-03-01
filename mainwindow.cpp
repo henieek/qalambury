@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(socket,SIGNAL(chatMessage(QString,QString)),this,SLOT(addMessage(QString,QString)));
     connect(socket,SIGNAL(nicknames(QList<QString>)),this,SLOT(getNicknames(QList<QString>)));
     connect(socket,SIGNAL(logout(QString)),this,SLOT(someoneLoggedOut(QString)));
+    connect(socket,SIGNAL(drawStart(QString)),this,SLOT(drawStart(QString)));
 
     connect(ui->wantDrawCheckBox,SIGNAL(toggled(bool)),this,SLOT(wantDrawToggled(bool)));
 
@@ -166,11 +167,7 @@ void MainWindow::addMessage(QString nickname, QString message) {
 }
 
 void MainWindow::wantDrawToggled(bool toggle) {
-    if(toggle) {
-        // wysylamy do serwera wiadomosc, ze chcemy rysowac
-    } else {
-        // wysylamy do serwera wiadomosc, ze jednak nie chcemy
-    }
+    this->socket->runCommand(new WantDrawCommand(toggle));
 }
 
 void MainWindow::getNicknames(QList<QString> list) {
@@ -195,4 +192,9 @@ void MainWindow::disconnect() {
 void MainWindow::disableActions(bool actionFlag) {
     ui->actionPo_cz->setEnabled(1-actionFlag);
     ui->actionRoz_cz->setEnabled(actionFlag);
+}
+
+void MainWindow::drawStart(QString word) {
+    ui->passwordLabel->setText(word);
+    // reszta spraw obslugi otrzymania slowa, ustawienie timera, etc.
 }

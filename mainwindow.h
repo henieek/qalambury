@@ -59,6 +59,7 @@ private slots:
     // uzywane przy laczeniu. jezeli sie polaczymy, to wylaczamy akcje "Polacz" z menu.
     // jezeli natomiast jestesmy rozlaczeni, to wylaczamy "Rozlacz"
     void disableActions(bool);
+    void drawStart(QString);
 };
 
 #endif // MAINWINDOW_H

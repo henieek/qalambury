@@ -63,6 +63,10 @@ void KalSocket::receiveData() {
             this->someoneLogout(this->readLine());
             continue;
         }
+        if(byteArray == "drawstart\n") {
+            this->drawingStart(this->readLine());
+            continue;
+        }
     }
 }
 
@@ -115,4 +119,8 @@ void KalSocket::getNicknames() {
 
 void KalSocket::someoneLogout(QByteArray byteArray) {
     emit logout(QString(byteArray).replace(QString("\n"),QString("")));
+}
+
+void KalSocket::drawingStart(QByteArray byteArray) {
+    emit drawStart(QString(byteArray).replace(QString("\n"),QString("")));
 }

@@ -47,4 +47,12 @@ public:
     void run(QTcpSocket *);
 };
 
+class WantDrawCommand : public AbstractCommand {
+    bool wantDraw;
+public:
+    WantDrawCommand(bool want = true);
+    virtual ~WantDrawCommand();
+    void run(QTcpSocket *);
+};
+
 #endif // COMMAND_H
