@@ -4,6 +4,7 @@
 #include <QtNetwork/QTcpSocket>
 
 #include "command.h"
+#include "serversettings.h"
 
 class KalSocket : public QTcpSocket
 {
@@ -16,6 +17,7 @@ signals:
     void chatMessage(QString,QString);
     void logout(QString);
     void drawStart(QString);
+    void gotSettings(ServerSettings);
 private slots:
     void receiveData();
     void drawPointsReceived(QByteArray);
@@ -26,6 +28,7 @@ private:
     void chatMessageReceived(QByteArray,QByteArray);
     void someoneLogout(QByteArray);
     void drawingStart(QByteArray);
+    void settingsReceived(QByteArray);
 public:
     KalSocket();
     ~KalSocket();

@@ -26,6 +26,7 @@ public:
     ~MainWindow();
 
 private:
+    ServerSettings serverSettings;
     AbstractCommand *command;
     bool connected;
     bool chatTimeout;
@@ -61,6 +62,7 @@ private slots:
     void disableActions(bool);
     void drawStart(QString);
     void drawTimeout();
+    void getSettings(ServerSettings);
 };
 
 #endif // MAINWINDOW_H

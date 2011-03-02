@@ -36,7 +36,10 @@ void KalSocket::receiveData() {
     QByteArray byteArray;
     while(this->bytesAvailable()) {
         byteArray = this->readLine();
-
+        if(byteArray == "settings\n") {
+            this->settingsReceived(this->readLine());
+            continue;
+        }
         if(byteArray == "clear\n") { // do zmiany, tutaj bedzie wzorzec polecenia.
             emit clear();
             continue;
@@ -68,6 +71,12 @@ void KalSocket::receiveData() {
             continue;
         }
     }
+}
+
+void KalSocket::settingsReceived(QByteArray byteArray) {
+    ServerSettings settings;
+    settings.setDrawInterval(QString(byteArray).toInt());
+    emit gotSettings(settings);
 }
 
 void KalSocket::drawPointsReceived(QByteArray byteArray) {

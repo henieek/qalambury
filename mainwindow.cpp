@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(socket,SIGNAL(nicknames(QList<QString>)),this,SLOT(getNicknames(QList<QString>)));
     connect(socket,SIGNAL(logout(QString)),this,SLOT(someoneLoggedOut(QString)));
     connect(socket,SIGNAL(drawStart(QString)),this,SLOT(drawStart(QString)));
+    connect(socket,SIGNAL(gotSettings(ServerSettings)),this,SLOT(getSettings(ServerSettings)));
 
     connect(ui->wantDrawCheckBox,SIGNAL(toggled(bool)),this,SLOT(wantDrawToggled(bool)));
 
@@ -60,6 +61,10 @@ MainWindow::~MainWindow()
     delete chatTimer;
     delete graphicsScene;
     delete ui;
+}
+
+void MainWindow::getSettings(ServerSettings settings) {
+    this->serverSettings = settings;
 }
 
 void MainWindow::drawPoint(QPoint point) {
@@ -198,7 +203,7 @@ void MainWindow::disableActions(bool actionFlag) {
 void MainWindow::drawStart(QString word) {
     ui->passwordLabel->setText(word);
     // reszta spraw obslugi otrzymania slowa, ustawienie timera, etc.
-    ui->progressBar->setInterval(2000);
+    ui->progressBar->setInterval(serverSettings.getDrawInterval());
     ui->progressBar->start();
 }
 
