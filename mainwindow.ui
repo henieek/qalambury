@@ -276,7 +276,7 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QProgressBar" name="progressBar">
+     <widget class="QProgressBarPlus" name="progressBar">
       <property name="value">
        <number>24</number>
       </property>
@@ -374,6 +374,11 @@
    <class>QListWidgetPlus</class>
    <extends>QListWidget</extends>
    <header>qlistwidgetplus.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QProgressBarPlus</class>
+   <extends>QProgressBar</extends>
+   <header location="global">qprogressbarplus.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -16,7 +16,8 @@ SOURCES += main.cpp\
     socketthread.cpp \
     logindialog.cpp \
     command.cpp \
-    qlistwidgetplus.cpp
+    qlistwidgetplus.cpp \
+    qprogressbarplus.cpp
 
 HEADERS  += mainwindow.h \
     qgraphicsviewplus.h \
@@ -24,7 +25,8 @@ HEADERS  += mainwindow.h \
     logindialog.h \
     command.h \
     qlistwidgetplus.h \
-    qtrio.h
+    qtrio.h \
+    qprogressbarplus.h
 
 FORMS    += mainwindow.ui \
     logindialog.ui

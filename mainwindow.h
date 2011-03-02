@@ -60,6 +60,7 @@ private slots:
     // jezeli natomiast jestesmy rozlaczeni, to wylaczamy "Rozlacz"
     void disableActions(bool);
     void drawStart(QString);
+    void drawTimeout();
 };
 
 #endif // MAINWINDOW_H

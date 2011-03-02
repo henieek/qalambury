@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // timer
     connect(chatTimer,SIGNAL(timeout()),this,SLOT(timeout()));
+    connect(ui->progressBar,SIGNAL(full()),this,SLOT(drawTimeout()));
 
     // inne
     this->disableActions(false); // Polacz - aktywne, Rozlacz - nieaktywne
@@ -197,4 +198,10 @@ void MainWindow::disableActions(bool actionFlag) {
 void MainWindow::drawStart(QString word) {
     ui->passwordLabel->setText(word);
     // reszta spraw obslugi otrzymania slowa, ustawienie timera, etc.
+    ui->progressBar->setInterval(2000);
+    ui->progressBar->start();
+}
+
+void MainWindow::drawTimeout() {
+
 }
