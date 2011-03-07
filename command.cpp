@@ -40,8 +40,8 @@ void LoginCommand::run(QTcpSocket *sock) {
     sock->write(QString("log\n" + this->getMessage() + "\n").toAscii());
 }
 
-DrawCommand::DrawCommand(int x, int y, int color) :
-        xRect(x), yRect(y), color(color)
+DrawCommand::DrawCommand(DrawCommand::DrawType type, int x, int y, int color) :
+        type(type), xRect(x), yRect(y), color(color)
 {
 
 }
@@ -49,7 +49,14 @@ DrawCommand::DrawCommand(int x, int y, int color) :
 DrawCommand::~DrawCommand() { }
 
 void DrawCommand::run(QTcpSocket *sock) {
-    sock->write(QString("draw\n" + QString::number(xRect) + " " + QString::number(yRect)
+    QString cmd;
+    if(this->type == LINE) {
+        cmd = "drawline\n";
+    }
+    else {
+        cmd = "drawpoint\n";
+    }
+    sock->write(QString(cmd + QString::number(xRect) + " " + QString::number(yRect)
                         + " " + QString::number(color) + "\n").toAscii());
 }
 

@@ -44,8 +44,12 @@ void KalSocket::receiveData() {
             emit clear();
             continue;
         }
-        if(byteArray == "draw\n") {
-            this->drawPointsReceived(this->readLine());
+        if(byteArray == "drawpoint\n") {
+            this->drawPointsReceived(this->readLine(),KalSocket::POINT);
+            continue;
+        }
+        if(byteArray == "drawline\n") {
+            this->drawPointsReceived(this->readLine(),KalSocket::LINE);
             continue;
         }
         if(byteArray == "log\n") {
@@ -79,7 +83,7 @@ void KalSocket::settingsReceived(QByteArray byteArray) {
     emit gotSettings(settings);
 }
 
-void KalSocket::drawPointsReceived(QByteArray byteArray) {
+void KalSocket::drawPointsReceived(QByteArray byteArray, KalSocket::DrawType type) {
     int x=0, y=0, color=0, i;
     int size = byteArray.size();
     for(i=0;byteArray[i]!=' ';i++) {
@@ -94,7 +98,7 @@ void KalSocket::drawPointsReceived(QByteArray byteArray) {
         color*=10;
         color+=static_cast<int>(byteArray[i]-48);
     }
-    emit pointsReceived(x,y,color);
+    emit pointsReceived(x,y,color,type);
 }
 
 void KalSocket::loginReceived(QByteArray byteArray) {

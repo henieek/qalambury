@@ -26,6 +26,7 @@ public:
     ~MainWindow();
 
 private:
+    QPoint previousPoint;
     ServerSettings serverSettings;
     AbstractCommand *command;
     bool connected;
@@ -42,11 +43,12 @@ private:
 private slots:
     void addMessage(QString,QString);
     void drawPoint(QPoint);
+    void drawLineTo(QPoint);
     void clearView();
     void switchColor();
     void switchColor(int);
     void displayError(QAbstractSocket::SocketError);
-    void pointsReceived(int,int,int);
+    void pointsReceived(int,int,int,KalSocket::DrawType);
     void connectWindowExec();
     void connectToHost(QTrio<QString,QHostAddress,int>);
     void connectionSuccess();

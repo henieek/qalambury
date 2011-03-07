@@ -3,7 +3,8 @@
 
 #include <QGraphicsView>
 #include <QMouseEvent>
-
+#include <QResizeEvent>
+#include <QDebug>
 
 class QGraphicsViewPlus : public QGraphicsView
 {
@@ -14,11 +15,12 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    // void resizeEvent(QResizeEvent *event);
 public:
     explicit QGraphicsViewPlus(QWidget *parent = 0);
-
 signals:
     void drawPoint(QPoint);
+    void drawLineTo(QPoint);
 public slots:
 
 };

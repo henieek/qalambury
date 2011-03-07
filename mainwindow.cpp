@@ -12,12 +12,14 @@ MainWindow::MainWindow(QWidget *parent) :
     this->connected = false;
     this->currColorId = 2; // czarny
     this->lastColorButton = ui->blackPushButton;
-    this->setWindowTitle(tr("Qalambury"));
     this->graphicsScene = new QGraphicsScene();
     ui->graphicsView->setScene(graphicsScene);
     this->currentPen.setColor(QColor("black"));
 
+
     connect(ui->graphicsView,SIGNAL(drawPoint(QPoint)),this,SLOT(drawPoint(QPoint)));
+    connect(ui->graphicsView,SIGNAL(drawLineTo(QPoint)),this,SLOT(drawLineTo(QPoint)));
+
     connect(ui->clearPushButton,SIGNAL(clicked()),this,SLOT(clearView()));
     connect(ui->redPushButton,SIGNAL(clicked()),this,SLOT(switchColor()));
     connect(ui->greenPushButton,SIGNAL(clicked()),this,SLOT(switchColor()));
@@ -31,7 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(socket,SIGNAL(connected()),this,SLOT(connectionSuccess()));
     connect(socket,SIGNAL(error(QAbstractSocket::SocketError)),
             this,SLOT(displayError(QAbstractSocket::SocketError)));
-    connect(socket,SIGNAL(pointsReceived(int,int,int)),this,SLOT(pointsReceived(int,int,int)));
+    connect(socket,SIGNAL(pointsReceived(int,int,int,KalSocket::DrawType)),
+            this,SLOT(pointsReceived(int,int,int,KalSocket::DrawType)));
     connect(socket,SIGNAL(clear()),graphicsScene,SLOT(clear()));
     connect(socket,SIGNAL(someoneLoggedIn(QString)),this,SLOT(someoneLoggedIn(QString)));
     connect(socket,SIGNAL(chatMessage(QString,QString)),this,SLOT(addMessage(QString,QString)));
@@ -68,10 +71,20 @@ void MainWindow::getSettings(ServerSettings settings) {
 }
 
 void MainWindow::drawPoint(QPoint point) {
+    this->previousPoint = point;
     this->graphicsScene->addEllipse(
-            point.x(),point.y(),5,5,currentPen,QBrush(currentPen.color(),Qt::SolidPattern));
+            point.x(),point.y(),1,1,currentPen,QBrush(currentPen.color(),Qt::SolidPattern));
     if(!sender()->objectName().isNull()) {
-        this->socket->runCommand(new DrawCommand(point.x(),point.y(),this->currColorId));
+        this->socket->runCommand(new DrawCommand(DrawCommand::POINT,point.x(),point.y(),this->currColorId));
+    }
+}
+
+void MainWindow::drawLineTo(QPoint point) {
+    this->graphicsScene->addLine(this->previousPoint.x(),this->previousPoint.y(),
+                                 point.x(),point.y(),this->currentPen);
+    this->previousPoint = point;
+    if(!sender()->objectName().isNull()) {
+        this->socket->runCommand(new DrawCommand(DrawCommand::LINE,point.x(),point.y(),this->currColorId));
     }
 }
 
@@ -121,9 +134,10 @@ void MainWindow::displayError(QAbstractSocket::SocketError) {
     msgBox.exec();
 }
 
-void MainWindow::pointsReceived(int x, int y, int color) {
+void MainWindow::pointsReceived(int x, int y, int color, KalSocket::DrawType type) {
     this->switchColor(color);
-    this->drawPoint(QPoint(x,y));
+    if(type == KalSocket::POINT) this->drawPoint(QPoint(x,y));
+    else this->drawLineTo(QPoint(x,y));
 }
 
 void MainWindow::connectWindowExec() {
@@ -201,6 +215,8 @@ void MainWindow::disableActions(bool actionFlag) {
 }
 
 void MainWindow::drawStart(QString word) {
+    this->clearView();
+    ui->graphicsView->setInteractive(true);
     ui->passwordLabel->setText(word);
     // reszta spraw obslugi otrzymania slowa, ustawienie timera, etc.
     ui->progressBar->setInterval(serverSettings.getDrawInterval());
@@ -208,5 +224,5 @@ void MainWindow::drawStart(QString word) {
 }
 
 void MainWindow::drawTimeout() {
-
+    ui->graphicsView->setInteractive(false);
 }

@@ -35,7 +35,11 @@ class DrawCommand : public AbstractCommand {
     int yRect;
     int color;
 public:
-    DrawCommand(int x = 0, int y = 0, int color = 0);
+    enum DrawType {
+        POINT,
+        LINE
+    } type;
+    DrawCommand(DrawCommand::DrawType, int x = 0, int y = 0, int color = 0);
     virtual ~DrawCommand();
     void run(QTcpSocket*);
 };

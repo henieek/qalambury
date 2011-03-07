@@ -9,9 +9,14 @@
 class KalSocket : public QTcpSocket
 {
     Q_OBJECT
+public:
+    enum DrawType {
+        POINT,
+        LINE
+    };
 signals:
     void nicknames(QList<QString>);
-    void pointsReceived(int,int,int);
+    void pointsReceived(int,int,int,KalSocket::DrawType);
     void clear();
     void someoneLoggedIn(QString);
     void chatMessage(QString,QString);
@@ -20,7 +25,7 @@ signals:
     void gotSettings(ServerSettings);
 private slots:
     void receiveData();
-    void drawPointsReceived(QByteArray);
+    void drawPointsReceived(QByteArray,KalSocket::DrawType);
     void loginReceived(QByteArray);
     void getNicknames();
 private:
@@ -30,6 +35,10 @@ private:
     void drawingStart(QByteArray);
     void settingsReceived(QByteArray);
 public:
+    /*enum DrawType {
+        POINT,
+        LINE
+    };*/
     KalSocket();
     ~KalSocket();
     void sendPoints(int,int,int);

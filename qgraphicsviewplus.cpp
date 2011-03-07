@@ -7,13 +7,16 @@ QGraphicsViewPlus::QGraphicsViewPlus(QWidget *parent) :
 }
 
 void QGraphicsViewPlus::mousePressEvent(QMouseEvent *event) {
-    this->scribbling = true;
-    emit drawPoint(event->globalPos());
+    if(this->isInteractive()) {
+        this->scribbling = true;
+        emit drawPoint(event->globalPos());
+    }
 }
 
 void QGraphicsViewPlus::mouseMoveEvent(QMouseEvent *event) {
     if(scribbling) {
-        emit drawPoint(event->globalPos());
+ //       emit drawPoint(event->globalPos());
+        emit drawLineTo(event->globalPos());
     }
 }
 
