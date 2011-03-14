@@ -65,6 +65,7 @@ private slots:
     void drawStart(QString);
     void drawTimeout();
     void getSettings(ServerSettings);
+    void showMessage(QString,QMessageBox::Icon icon = QMessageBox::Critical) const;
 };
 
 #endif // MAINWINDOW_H

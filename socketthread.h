@@ -23,6 +23,7 @@ signals:
     void logout(QString);
     void drawStart(QString);
     void gotSettings(ServerSettings);
+    void errorMessage(QString);
 private slots:
     void receiveData();
     void drawPointsReceived(QByteArray,KalSocket::DrawType);

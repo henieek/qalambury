@@ -74,6 +74,10 @@ void KalSocket::receiveData() {
             this->drawingStart(this->readLine());
             continue;
         }
+        if(byteArray == "err\n") {
+            emit errorMessage(QString(this->readLine()).replace(QString("\n"),QString("")));
+            continue;
+        }
     }
 }
 

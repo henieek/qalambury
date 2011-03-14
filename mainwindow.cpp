@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(socket,SIGNAL(logout(QString)),this,SLOT(someoneLoggedOut(QString)));
     connect(socket,SIGNAL(drawStart(QString)),this,SLOT(drawStart(QString)));
     connect(socket,SIGNAL(gotSettings(ServerSettings)),this,SLOT(getSettings(ServerSettings)));
+    connect(socket,SIGNAL(errorMessage(QString)),this,SLOT(showMessage(QString)));
 
     connect(ui->wantDrawCheckBox,SIGNAL(toggled(bool)),this,SLOT(wantDrawToggled(bool)));
 
@@ -127,11 +128,7 @@ void MainWindow::switchColor(int color) {
 void MainWindow::displayError(QAbstractSocket::SocketError) {
     if(this->connected) ui->loginInfoLabel->setText(tr("Nie jestes zalogowany."));
     this->connected = false;
-    QMessageBox msgBox;
-    msgBox.setText(tr("Wystapil blad polaczenia"));
-    msgBox.setIcon(QMessageBox::Critical);
-    msgBox.setWindowTitle(tr("Wystapil blad"));
-    msgBox.exec();
+    this->showMessage("Wystapil blad polaczenia!");
 }
 
 void MainWindow::pointsReceived(int x, int y, int color, KalSocket::DrawType type) {
@@ -225,4 +222,12 @@ void MainWindow::drawStart(QString word) {
 
 void MainWindow::drawTimeout() {
     ui->graphicsView->setInteractive(false);
+}
+
+void MainWindow::showMessage(QString message, QMessageBox::Icon icon) const {
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(tr("Wystapil blad"));
+    msgBox.setText(message);
+    msgBox.setIcon(icon);
+    msgBox.exec();
 }
